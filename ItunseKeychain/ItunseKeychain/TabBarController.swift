@@ -20,9 +20,9 @@ class TabBarController: UITabBarController {
         view.backgroundColor = .white
         setupViewControllers()
         setupSearchBar()
-//        if let searchTexts = networkManager.getSearchTextFromKeychain() {
-//            performInitialSearch(with: searchTexts.last!)
-//        }
+        if let searchTexts = networkManager.getSearchTextFromKeychain() {
+            performInitialSearch(with: searchTexts.last!)
+        }
     }
 
     private func setupSearchBar() {
@@ -45,41 +45,41 @@ class TabBarController: UITabBarController {
 
     }
 
-//    func performInitialSearch(with searchText: String) {
-//       searchBar.text = searchText
-//       searchBarSearchButtonClicked(searchBar)
-//   }
+    func performInitialSearch(with searchText: String) {
+       searchBar.text = searchText
+       searchBarSearchButtonClicked(searchBar)
+   }
 }
 
 
 extension TabBarController: UISearchBarDelegate {
 
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        guard let searchText = searchBar.text, !searchText.isEmpty else {
-//            return
-//        }
-//
-//        networkManager.getCharacter(albumName: searchText) { [weak self] albums in
-//
-//            if let getAlbums = self?.networkManager.getAlbumsFromDisk() {
-//                print("getAlbums count", getAlbums.count)
-//                self?.albums = getAlbums
-//                if let searchTexts = self?.networkManager.getSearchTextFromDisk() {
-//                    self?.searchHistoryViewController.searchHistory = searchTexts
-//                }
-//            } else {
-//                self?.albums = albums
-//            }
-//
-//            self?.networkManager.saveAlbumToDisk(albums)
-//            self?.networkManager.saveSearchTextToDisk(searchText: searchText)
-//            DispatchQueue.main.async {
-//                self?.viewController.albums = albums
-//                self?.viewController.collectionView.reloadData()
-//                self?.searchHistoryViewController.tableView.reloadData()
-//            }
-//        }
-//
-////        searchBar.resignFirstResponder()
-//    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else {
+            return
+        }
+
+        networkManager.getCharacter(albumName: searchText) { [weak self] albums in
+
+            if let getAlbums = self?.networkManager.getAlbumsFromKeychain() {
+                print("getAlbums count", getAlbums.count)
+                self?.albums = getAlbums
+                if let searchTexts = self?.networkManager.getSearchTextFromKeychain() {
+                    self?.searchHistoryViewController.searchHistory = searchTexts
+                }
+            } else {
+                self?.albums = albums
+            }
+
+            self?.networkManager.saveAlbumToKeychain(albums)
+            self?.networkManager.saveSearchTextToKeychain(searchText: searchText)
+            DispatchQueue.main.async {
+                self?.viewController.albums = albums
+                self?.viewController.collectionView.reloadData()
+                self?.searchHistoryViewController.tableView.reloadData()
+            }
+        }
+
+//        searchBar.resignFirstResponder()
+    }
 }

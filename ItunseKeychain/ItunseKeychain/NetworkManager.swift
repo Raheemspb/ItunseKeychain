@@ -51,7 +51,7 @@ class NetworkManager {
                 let album = try JSONDecoder().decode(AlbumName.self, from: data).results
                 completionHandler(album)
             } catch {
-                print("Error: ", error.localizedDescription)
+                print("Error - ", error.localizedDescription)
             }
         }.resume()
     }
@@ -70,7 +70,7 @@ class NetworkManager {
     func getAlbumsFromKeychain() -> [Album]? {
 
         guard let savedData = keychain.getData("album.json") else {
-            print("No character found in keychain")
+            print("No albums found in keychain")
             return nil
         }
 
@@ -85,12 +85,25 @@ class NetworkManager {
     }
 
     func saveSearchTextToKeychain(searchText: String) {
+        var searchTexts = getSearchTextFromKeychain() ?? []
+        searchTexts.append(searchText)
 
-        
+        do {
+            let encodedData = try JSONEncoder().encode(searchTexts)
+            keychain.set(encodedData, forKey: "searchText.json")
+            print("Search text saved to Keychain")
+        } catch {
+            print("Error saving search test: ", error.localizedDescription)
+        }
+
     }
 
     func getSearchTextFromKeychain() -> [String]? {
 
+        if let searchTextData = keychain.getData("searchText.json") {
+            let decodedData = try? JSONDecoder().decode([String].self, from: searchTextData)
+            return decodedData
+        }
         return nil
     }
 }
