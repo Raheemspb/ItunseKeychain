@@ -55,45 +55,21 @@ class NetworkManager {
         }.resume()
     }
 
-    func saveAlbumToDisk(_ albums: [Album]) {
-        do {
-            try Disk.save(albums, to: .documents, as: "Albums.json")
-            print("Albums saved to disk")
-        } catch {
-            print("Error saving albums: ", error.localizedDescription)
-        }
+    func saveAlbumToKeychain(_ albums: [Album]) {
+
     }
 
-    func getAlbumsFromDisk() -> [Album]? {
-        do {
-            let albums = try Disk.retrieve("Albums.json", from: .documents, as: [Album].self)
-            print("Albums retrieved from disk")
-            return albums
-        } catch {
-            print("Error retrieving albums: ", error.localizedDescription)
-            return nil
-        }
+    func getAlbumsFromKeychain() -> [Album]? {
+
+        return nil
     }
 
-    func saveSearchTextToDisk(searchText: String) {
-        do {
-            var searchTexts = getSearchTextFromDisk() ?? []
-            searchTexts.append(searchText)
-            try Disk.save(searchTexts, to: .documents, as: "searchText.json")
-            print("Saved searchText to disk")
-        } catch {
-            print("Error saving search text: ", error.localizedDescription)
-        }
+    func saveSearchTextToKeychain(searchText: String) {
+
     }
 
-    func getSearchTextFromDisk() -> [String]? {
-        do {
-            let searchTexts = try Disk.retrieve("searchText.json", from: .documents, as: [String].self)
-            print("Search text retrieved from disk")
-            return searchTexts
-        } catch {
-            print("Error retrieving search text: ", error.localizedDescription)
-            return nil
-        }
+    func getSearchTextFromKeychain() -> [String]? {
+
+        return nil
     }
 }
