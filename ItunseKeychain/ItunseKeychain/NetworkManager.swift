@@ -22,6 +22,7 @@ struct Album: Codable {
 class NetworkManager {
 
     static let shared = NetworkManager()
+    let keychain = KeychainSwift()
 
     func fetchAlbum(albumName: String) -> String {
         let url = "https://itunes.apple.com/search?term=\(albumName)&entity=album&attribute=albumTerm"
@@ -57,15 +58,35 @@ class NetworkManager {
 
     func saveAlbumToKeychain(_ albums: [Album]) {
 
+        do {
+            let encodedAlbum = try JSONEncoder().encode(albums)
+            keychain.set(encodedAlbum, forKey: "album.json")
+            print("ALbums saved to Keychain")
+        } catch {
+            print("Error saving albums to keychain", error.localizedDescription)
+        }
     }
 
     func getAlbumsFromKeychain() -> [Album]? {
 
-        return nil
+        guard let savedData = keychain.getData("album.json") else {
+            print("No character found in keychain")
+            return nil
+        }
+
+        do {
+            let albums = try JSONDecoder().decode([Album].self, from: savedData)
+            print("Albums loaded from Keychan")
+            return albums
+        } catch {
+            print("Error loading albums from Keychain")
+            return nil
+        }
     }
 
     func saveSearchTextToKeychain(searchText: String) {
 
+        
     }
 
     func getSearchTextFromKeychain() -> [String]? {
