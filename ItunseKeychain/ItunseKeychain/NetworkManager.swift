@@ -29,7 +29,7 @@ class NetworkManager {
         return url
     }
 
-    func getCharacter(albumName: String, completionHandler: @escaping ([Album]) -> Void) {
+    func getAlbums(albumName: String, completionHandler: @escaping ([Album]) -> Void) {
         let urlString = fetchAlbum(albumName: albumName)
         guard let url = URL(string: urlString) else {
             print("Error")
@@ -95,7 +95,6 @@ class NetworkManager {
         } catch {
             print("Error saving search test: ", error.localizedDescription)
         }
-
     }
 
     func getSearchTextFromKeychain() -> [String]? {

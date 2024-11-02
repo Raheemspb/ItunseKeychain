@@ -36,7 +36,13 @@ class TabBarController: UITabBarController {
 
     private func setupViewControllers() {
         let searchNavController = UINavigationController(rootViewController: viewController)
-        searchNavController.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 0)
+        searchNavController.tabBarItem = UITabBarItem(
+            title: "Search",
+            image: UIImage(
+                systemName: "magnifyingglass"
+            ),
+            tag: 0
+        )
 
         let historyNavController = UINavigationController(rootViewController: searchHistoryViewController)
         historyNavController.tabBarItem = UITabBarItem(title: "History", image: UIImage(systemName: "clock"), tag: 1)
@@ -51,7 +57,6 @@ class TabBarController: UITabBarController {
    }
 }
 
-
 extension TabBarController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -59,7 +64,7 @@ extension TabBarController: UISearchBarDelegate {
             return
         }
 
-        networkManager.getCharacter(albumName: searchText) { [weak self] albums in
+        networkManager.getAlbums(albumName: searchText) { [weak self] albums in
 
             if let getAlbums = self?.networkManager.getAlbumsFromKeychain() {
                 print("getAlbums count", getAlbums.count)
@@ -79,7 +84,6 @@ extension TabBarController: UISearchBarDelegate {
                 self?.searchHistoryViewController.tableView.reloadData()
             }
         }
-
 //        searchBar.resignFirstResponder()
     }
 }
